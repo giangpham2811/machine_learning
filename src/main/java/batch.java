@@ -57,10 +57,12 @@ public class batch {
        thetas = Arrays.asList(0.0,0.0,0.0,0.0);
        x_values = Arrays.asList(base,size,no_floors,no_rooms);
        List<Double> temp = thetas;
+       System.out.println(temp);
        double min_cost = cal_cost(x_values, prices, temp);
        List<Double> best_theta = thetas;
        for (int i = 0; i < interation ; i++) {
             temp = cal_next_theta(x_values,prices,thetas,learning_rate);
+            thetas = temp;
            if (cal_cost(x_values,prices,temp)<min_cost){
                min_cost = cal_cost(x_values, prices, temp);
                best_theta = temp;
