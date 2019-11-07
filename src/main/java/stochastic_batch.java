@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.lang.Math;
 import java.util.Random;
-
+import static java.lang.Math.min;
 import static java.lang.Math.pow;
 
-public class mini_batch {
+public class stochastic_batch {
     static List<Double> base;
     static List<Double> size;
     static List<Double> no_floors;
@@ -16,9 +16,7 @@ public class mini_batch {
     static List<List<Double>> x_values;
     static List<Double> thetas;
     public static double learning_rate = 0.001;
-    public static double batch_size = 2;
-    private static int number_interation = 1000;
-
+    public static int interation = 10000;
     public static double cal_derivative(List<List<Double>> x_values, List<Double> y_values, List<Double> thetas, int pos) {
         double sigma = 0;
         for (int i = 0; i < y_values.size(); i++) {
@@ -59,18 +57,28 @@ public class mini_batch {
         prices = Arrays.asList(2.5, 3.4, 1.8, 4.5, 3.2, 1.6);
         thetas = Arrays.asList(0.0,0.0,0.0,0.0);
         x_values = Arrays.asList(base,size,no_floors,no_rooms);
-        List<Double> temp = thetas;
-        double min_cost = cal_cost(x_values, prices, temp);
+        System.out.println("X values are : " + x_values);
+        System.out.println("Y values are : " + prices);
+        double min_cost = cal_cost(x_values,prices,thetas);
         List<Double> best_theta = thetas;
-        if (x_values.size()<batch_size){
-            System.out.println("Error ,Batch size must bigger than data size ");
-        }
-        for (int i = 0; i <number_interation ; i++) {
-            Random random = new Random();
-            int pos = random.nextInt(x_values.size());
-            List<Integer> possitions = new ArrayList<Integer>();
-            possitions.add(pos);
-        }
+        for (int i = 0; i < interation; i++) {
+            Random r = new Random();
+            int index = r.nextInt(x_values.size());
+            List<List<Double>> x_inputs = new ArrayList<List<Double>>();
+            for (int j = 0; j < x_values.size(); j++) {
+                x_inputs.add(Arrays.asList(x_values.get(j).get(index)));
+            }
+            List<Double> y_inputs = new ArrayList<Double>();
+            y_inputs.add(prices.get(index));
+            thetas = cal_next_theta(x_inputs,y_inputs,thetas,learning_rate);
+                if (cal_cost(x_values,prices,thetas)<min_cost){
+                    best_theta = thetas;
+                    min_cost = cal_cost(x_values,prices,thetas);
 
+                }
+
+        }
+        System.out.println("Best theta is:" + best_theta);
+        System.out.println("Min cost is :" + min_cost);
     }
 }

@@ -61,15 +61,15 @@ public class batch {
        double min_cost = cal_cost(x_values, prices, temp);
        List<Double> best_theta = thetas;
        for (int i = 0; i < interation ; i++) {
-            temp = cal_next_theta(x_values,prices,thetas,learning_rate);
-            thetas = temp;
-           if (cal_cost(x_values,prices,temp)<min_cost){
+           temp = cal_next_theta(x_values, prices, thetas, learning_rate);
+           thetas = temp;
+           if (cal_cost(x_values, prices, temp) < min_cost) {
                min_cost = cal_cost(x_values, prices, temp);
                best_theta = temp;
            }
        }
-      System.out.println(best_theta);
-      System.out.println(min_cost);
+       System.out.println(best_theta);
+       System.out.println(min_cost);
       //note
     }
 }
