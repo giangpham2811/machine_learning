@@ -68,5 +68,6 @@ public class batch {
        }
       System.out.println(best_theta);
       System.out.println(min_cost);
+      //note
     }
 }
