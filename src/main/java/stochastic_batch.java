@@ -16,7 +16,7 @@ public class stochastic_batch {
     static List<List<Double>> x_values;
     static List<Double> thetas;
     public static double learning_rate = 0.001;
-    public static int interation = 10000;
+    public static int interation = 1000;
     public static double cal_derivative(List<List<Double>> x_values, List<Double> y_values, List<Double> thetas, int pos) {
         double sigma = 0;
         for (int i = 0; i < y_values.size(); i++) {

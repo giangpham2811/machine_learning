@@ -1,9 +1,4 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.lang.Math;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.pow;
 
@@ -16,7 +11,7 @@ public class mini_batch {
     static List<List<Double>> x_values;
     static List<Double> thetas;
     public static double learning_rate = 0.001;
-    public static double batch_size = 2;
+    public static int batch_size = 2;
     private static int number_interation = 1000;
 
     public static double cal_derivative(List<List<Double>> x_values, List<Double> y_values, List<Double> thetas, int pos) {
@@ -51,6 +46,18 @@ public class mini_batch {
         }
         return sigma / (2 * y_values.size());
     }
+    public static List<Integer> get_batch(int batch_size,int input_size){
+        List<Integer> l = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<Integer>();
+        for (int i = 0; i <input_size; i++) {
+            l.add(new Integer(i));
+        }
+        Collections.shuffle(l);
+        for (int i = 0; i <batch_size ; i++) {
+            result.add(l.get(i));
+        }
+        return result;
+    }
     public static void main(String[] args) {
         base = Arrays.asList(1.0,1.0,1.0,1.0,1.0,1.0);
         size = Arrays.asList(30.0, 43.0, 25.0, 51.0, 40.0, 20.0);
@@ -62,15 +69,24 @@ public class mini_batch {
         List<Double> temp = thetas;
         double min_cost = cal_cost(x_values, prices, temp);
         List<Double> best_theta = thetas;
-        if (x_values.size()<batch_size){
-            System.out.println("Error ,Batch size must bigger than data size ");
-        }
+        List<List<Double>> x_input = new ArrayList<List<Double>>();
+        List<Double> y_input = new ArrayList<Double>();
+        if (prices.size()<batch_size){ System.out.println("Error ,Batch size must bigger than data size ");}
         for (int i = 0; i <number_interation ; i++) {
-            Random random = new Random();
-            int pos = random.nextInt(x_values.size());
-            List<Integer> possitions = new ArrayList<Integer>();
-            possitions.add(pos);
+            List<Integer> samples = get_batch(batch_size,prices.size());
+            for (int j = 0; j < batch_size ; j++) {
+                x_input.add(Arrays.asList(x_values.get(samples.get(1)).get(samples.get(0))));
+                y_input.add(prices.get(samples.get(0)));
+            }
+            System.out.println("X input is" + x_input +"and" + "Y input is" + y_input);
+            temp = cal_next_theta(x_input,y_input,temp,learning_rate);
+            thetas = temp;
+            if (cal_cost(x_values,prices,thetas)<min_cost){
+            best_theta = temp;
+            min_cost = cal_cost(x_values,prices,thetas);
+            }
+            System.out.println("Best theta is" + best_theta);
+            System.out.println("Min cost is" + min_cost);
         }
-
     }
 }
