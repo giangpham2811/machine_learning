@@ -15,6 +15,7 @@ public class batch {
     static List<List<Double>> x_values;
     static List<Double> thetas;
     public static double learning_rate = 0.001;
+    public static int interation = 1000;
     public static double cal_derivative(List<List<Double>> x_values, List<Double> y_values, List<Double> thetas, int pos) {
         double sigma = 0;
         for (int i = 0; i < y_values.size(); i++) {
@@ -58,13 +59,14 @@ public class batch {
        List<Double> temp = thetas;
        double min_cost = cal_cost(x_values, prices, temp);
        List<Double> best_theta = thetas;
-       for (int i = 0; i < 1000 ; i++) {
+       for (int i = 0; i < interation ; i++) {
             temp = cal_next_theta(x_values,prices,thetas,learning_rate);
+           if (cal_cost(x_values,prices,temp)<min_cost){
+               min_cost = cal_cost(x_values, prices, temp);
+               best_theta = temp;
+           }
        }
-       if (cal_cost(x_values,prices,temp)<min_cost){
-           min_cost = cal_cost(x_values, prices, temp);
-           best_theta = temp;
-       }
-       System.out.println(min_cost);
+      System.out.println(best_theta);
+      System.out.println(min_cost);
     }
 }
