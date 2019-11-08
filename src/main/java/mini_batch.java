@@ -69,24 +69,31 @@ public class mini_batch {
         List<Double> temp = thetas;
         double min_cost = cal_cost(x_values, prices, temp);
         List<Double> best_theta = thetas;
-        List<List<Double>> x_input = new ArrayList<List<Double>>();
-        List<Double> y_input = new ArrayList<Double>();
         if (prices.size()<batch_size){ System.out.println("Error ,Batch size must bigger than data size ");}
         for (int i = 0; i <number_interation ; i++) {
+            List<List<Double>> x_input = new ArrayList<List<Double>>();
+            List<Double> y_input = new ArrayList<Double>();
             List<Integer> samples = get_batch(batch_size,prices.size());
-            for (int j = 0; j < batch_size ; j++) {
-                x_input.add(Arrays.asList(x_values.get(samples.get(1)).get(samples.get(0))));
-                y_input.add(prices.get(samples.get(0)));
+            for (int j = 0; j < x_values.size() ; j++) {
+                List<Double> column = new ArrayList<Double>();
+                for (int k = 0; k < batch_size; k++) {
+                    column.add(x_values.get(j).get(samples.get(k)));
+                }
+                x_input.add(column);
             }
-            System.out.println("X input is" + x_input +"and" + "Y input is" + y_input);
+            for (int rand:samples
+                 ) {
+                y_input.add(prices.get(rand));
+            }
+            System.out.println("X input is : " + x_input +"and" + "Y input is : " + y_input);
             temp = cal_next_theta(x_input,y_input,temp,learning_rate);
             thetas = temp;
             if (cal_cost(x_values,prices,thetas)<min_cost){
             best_theta = temp;
             min_cost = cal_cost(x_values,prices,thetas);
             }
-            System.out.println("Best theta is" + best_theta);
-            System.out.println("Min cost is" + min_cost);
+            System.out.println("Best theta is " + best_theta);
+            System.out.println("Min cost is " + min_cost);
         }
     }
 }
